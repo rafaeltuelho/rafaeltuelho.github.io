@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { formatDate } from '../lib/posts';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = post.data;
+---
+
+<BaseLayout {title} {description} {pubDate} {updatedDate} type="article">
+  <article class="blog-post">
+    <header class="article-header">
+      <a href="/" class="back-link">All writing</a>
+      <h1>{title}</h1>
+      <p class="article-description">{description}</p>
+      <div class="article-meta">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        {updatedDate && <span>Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></span>}
+      </div>
+      {tags.length > 0 && <ul class="tags" aria-label="Topics">{tags.map(tag => <li>{tag}</li>)}</ul>}
+    </header>
+    <div class="prose"><slot /></div>
+    <a href="/" class="back-link article-end">All writing</a>
+  </article>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { GITHUB_URL, PROJECT_URL } from '../consts';
+---
+
+<BaseLayout title="About" description="Rafael Tuelho’s explorations in agentic AI and software engineering.">
+  <article class="page-content prose">
+    <h1>Hi, I’m Rafael<span class="accent">.</span></h1>
+    <p>I’m exploring agentic AI by building things and sharing what I learn along the way.</p>
+    <p>This blog is where I’ll write about the experiments, implementation choices, and lessons from that work.</p>
+    <h2>What I’m working on</h2>
+    <p>My first series will follow the experience of building a <a href={PROJECT_URL}>construction submittal assistant</a>.</p>
+    <p>You can find my code and other explorations on <a href={GITHUB_URL}>GitHub</a>.</p>
+  </article>
+</BaseLayout>

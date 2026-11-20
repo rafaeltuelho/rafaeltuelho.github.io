@@ -1,0 +1,49 @@
+<div class="theme-picker" hidden>
+  <label for="theme" class="sr-only">Color theme</label>
+  <select id="theme" aria-label="Color theme">
+    <option value="system">System</option>
+    <option value="dark">Dark</option>
+    <option value="light">Light</option>
+  </select>
+</div>
+
+<script>
+  const picker = document.querySelector<HTMLSelectElement>('#theme');
+  const container = document.querySelector<HTMLElement>('.theme-picker');
+  const system = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(preference: string) {
+    document.documentElement.dataset.theme = preference === 'system'
+      ? (system.matches ? 'dark' : 'light')
+      : preference;
+    if (picker) picker.value = preference;
+  }
+
+  function readPreference() {
+    try {
+      const saved = localStorage.getItem('theme');
+      return saved === 'dark' || saved === 'light' ? saved : 'system';
+    } catch {
+      return 'system';
+    }
+  }
+
+  applyTheme(readPreference());
+  if (container) container.hidden = false;
+
+  picker?.addEventListener('change', () => {
+    applyTheme(picker.value);
+    try {
+      if (picker.value === 'system') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', picker.value);
+    } catch {
+      // The current page can still switch themes when storage is unavailable.
+    }
+  });
+  system.addEventListener('change', () => {
+    if (picker?.value === 'system') applyTheme('system');
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'theme' || event.key === null) applyTheme(readPreference());
+  });
+</script>

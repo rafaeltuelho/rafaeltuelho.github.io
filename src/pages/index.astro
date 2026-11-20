@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PROJECT_URL } from '../consts';
+import { formatDate, getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout>
+  <section class="intro" aria-labelledby="intro-title">
+    <h1 id="intro-title">Exploring agentic <span class="accent">AI.</span></h1>
+    <p>Notes from building, testing, and learning in public.</p>
+  </section>
+  <section aria-labelledby="writing-title" class="writing">
+    <div class="section-heading">
+      <h2 id="writing-title">Writing</h2>
+      <a href="/rss.xml" aria-label="Subscribe via RSS">RSS</a>
+    </div>
+    {posts.length > 0 ? (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <article>
+              <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+              <p>{post.data.description}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="empty-state">
+        <h3>The first post is on its way.</h3>
+        <p>I’m documenting my explorations in agentic AI, starting with a construction submittal assistant.</p>
+        <a href={PROJECT_URL}>Explore the project on GitHub</a>
+      </div>
+    )}
+  </section>
+</BaseLayout>
